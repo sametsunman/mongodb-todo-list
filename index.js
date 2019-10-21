@@ -10,7 +10,7 @@ let Todo = require('./todo.model');
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb+srv://dbadmin:qwe123@asnus-sql-5enaw.mongodb.net/todolist', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://<MyUsername>:<MyPassword>@asnus-sql-5enaw.mongodb.net/todolist', { useNewUrlParser: true });
 const connection = mongoose.connection;
 
 connection.once('open', function() {

@@ -1,13 +1,19 @@
 {
-  "name": "todo-list-client",
-  "version": "1.0.0",
+  "name": "asnus-todolist",
+  "version": "0.1.0",
+  "description": "A ToDo List App With React, Redux and MongoDb",
+  "private": true,
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-redux": "^7.1.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.1"
+    "react-scripts": "3.2.0",
+    "redux": "^4.0.4",
+    "redux-logger": "^3.0.6",
+    "typescript": "^3.6.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -18,11 +24,17 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "proxy":"http://localhost:5000"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:5000"
 }

@@ -5,7 +5,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const todoRoutes = express.Router();
 
-let Todo = require('./todo.model');
+let Todo = require('./model');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -14,7 +14,7 @@ mongoose.connect('mongodb+srv://dbadmin:qwe123@asnus-sql-5enaw.mongodb.net/todol
 const connection = mongoose.connection;
 
 connection.once('open', function() {
-    console.log("MongoDB database connection established successfully");
+    console.log("MongoDB database connected successfully");
 })
 
 todoRoutes.route('/').get(function(req, res) {
@@ -38,25 +38,24 @@ todoRoutes.route('/add').post(function(req, res) {
     let todo = new Todo(req.body);
     todo.save()
         .then(todo => {
-            res.status(200).json({'todo': 'todo added successfully'});
+            res.status(200).json({'todo': 'ToDo added successfully'});
         })
         .catch(err => {
-            res.status(400).send('adding new todo failed');
+            res.status(400).send('Adding new ToDo failed');
         });
 });
 
 todoRoutes.route('/update/:id').post(function(req, res) {
     Todo.findById(req.params.id, function(err, todo) {
         if (!todo)
-            res.status(404).send('data is not found');
+            res.status(404).send('Data is not found');
         else
-            todo.todo_description = req.body.todo_description;
-            todo.todo_responsible = req.body.todo_responsible;
-            todo.todo_priority = req.body.todo_priority;
-            todo.todo_completed = req.body.todo_completed;
+            todo.title = req.body.title;
+            todo.description = req.body.description;
+            todo.completed = req.body.completed;
 
             todo.save().then(todo => {
-                res.json('Todo updated');
+                res.json('ToDo updated');
             })
             .catch(err => {
                 res.status(400).send("Update not possible");

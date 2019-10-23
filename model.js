@@ -2,16 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let Todo = new Schema({
-    todo_description: {
+    title: {
         type: String
     },
-    todo_responsible: {
+    description: {
         type: String
     },
-    todo_priority: {
-        type: String
-    },
-    todo_completed: {
+    completed: {
         type: Boolean
     }
 });

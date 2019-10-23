@@ -8,11 +8,11 @@ import axios from 'axios';
 
 const Todo = props => (
     <tr>
-        <td className={props.todo.todo_completed ? 'completed' : ''}>{props.todo.todo_description}</td>
-        <td className={props.todo.todo_completed ? 'completed' : ''}>{props.todo.todo_responsible}</td>
-        <td className={props.todo.todo_completed ? 'completed' : ''}>{props.todo.todo_priority}</td>
+        <td className={props.todo.completed ? 'completed' : ''}>{props.todo.title}</td>
+        <td className={props.todo.completed ? 'completed' : ''}>{props.todo.description}</td>
         <td>
             <Link to={"/edit/"+props.todo._id}>Edit</Link>
+            <Link to={"/remove/"+props.todo._id}>Delete</Link>
         </td>
     </tr>
 )
@@ -59,9 +59,8 @@ class TodosList extends Component {
                 <table className="table table-striped" style={{ marginTop: 20 }}>
                     <thead>
                         <tr>
+                            <th>Title</th>
                             <th>Description</th>
-                            <th>Responsible</th>
-                            <th>Priority</th>
                             <th>Actions</th>
                         </tr>
                     </thead>

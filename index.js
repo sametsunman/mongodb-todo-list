@@ -63,6 +63,32 @@ todoRoutes.route('/update/:id').post(function(req, res) {
     });
 });
 
+todoRoutes.route('/check/:id').post(function(req, res) {
+    Todo.findById(req.params.id, function(err, todo) {
+        if (!todo)
+            res.status(404).send('Data is not found');
+        else
+            todo.completed = !todo.completed;
+
+            todo.save().then(todo => {
+                res.json('ToDo updated');
+            })
+            .catch(err => {
+                res.status(400).send("Update not possible");
+            });
+    });
+});
+
+todoRoutes.route('/remove/:id').post(function(req, res) {
+    Todo.findByIdAndDelete(req.params.id, function(err) {
+        if (!err)
+                res.json('ToDo removed');
+        else
+            res.status(400).send("Removing not possible");
+    });
+});
+
+
 app.use('/todos', todoRoutes);
 
 

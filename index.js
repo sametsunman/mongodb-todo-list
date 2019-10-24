@@ -71,7 +71,7 @@ todoRoutes.route('/check/:id').post(function(req, res) {
             todo.completed = !todo.completed;
 
             todo.save().then(todo => {
-                res.json('ToDo updated');
+                res.json(todo.completed);
             })
             .catch(err => {
                 res.status(400).send("Update not possible");

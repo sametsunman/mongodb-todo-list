@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Card, CardHeader, CardBody, CardFooter, Button, Row, Collapse } from "shards-react";
+import { Container, Card, CardHeader, CardBody, CardFooter, Button, Row, Collapse, Alert } from "shards-react";
 import { connect } from "react-redux";
 import { addTodo } from "./redux/actions";
 import axios from 'axios';
@@ -12,12 +12,44 @@ class App extends Component {
     super(props);
     this.state = {
       collapse: true,
-      selectedTodoItem: {}
+      selectedTodoItem: {},
+      visible: false,
+      message: '',
+      countdown: 0,
+      timeUntilDismissed: 5
     };
     this.toggle = this.toggle.bind(this);
     this.saveItem = this.saveItem.bind(this);
     this.setValue = this.setValue.bind(this);
-  }
+    this.showAlert = this.showAlert.bind(this);
+    this.handleTimeChange = this.handleTimeChange.bind(this);
+    this.clearInterval = this.clearInterval.bind(this);
+
+}
+
+showAlert(message) {
+this.clearInterval();
+this.setState({ message:message, visible: true, countdown: 0, timeUntilDismissed: 2 });
+this.interval = setInterval(this.handleTimeChange, 1000);
+}
+
+handleTimeChange() {
+if (this.state.countdown < this.state.timeUntilDismissed - 1) {
+    this.setState({
+        ...this.state,
+        ...{ countdown: this.state.countdown + 1 }
+    });
+    return;
+}
+
+this.setState({ ...this.state, ...{ visible: false } });
+this.clearInterval();
+}
+
+clearInterval() {
+clearInterval(this.interval);
+this.interval = null;
+}
 
   toggle() {
     this.setState({ collapse: !this.state.collapse });
@@ -53,10 +85,6 @@ class App extends Component {
 
   saveItem() {
 
-    console.log(`Todo Title: ${this.state.selectedTodoItem.title}`);
-    console.log(`Todo Description: ${this.state.selectedTodoItem.description}`);
-    console.log(`Todo Completed: ${this.state.selectedTodoItem.completed}`);
-
     const newTodo = {
       title: this.state.selectedTodoItem.title,
       description: this.state.selectedTodoItem.description,
@@ -66,10 +94,12 @@ class App extends Component {
     if (this.state.selectedTodoItem.id === undefined) {
       axios.post('/todos/add', newTodo).then(res => console.log(res.data));
       this.props.addTodo(newTodo);
+      this.showAlert('New task is added');
 
     }
     else {
       axios.post('/todos/update/' + this.state.selectedTodoItem.id, newTodo).then(res => console.log(res.data));
+      this.showAlert('The task is updated');
     }
 
     this.setState({
@@ -93,16 +123,19 @@ class App extends Component {
 
   render() {
 
-    const { selectedTodoItem, collapse } = this.state;
+    const { selectedTodoItem, collapse,visible,message } = this.state;
 
     return (
       <Container className="d-flex justify-content-center p-5">
         <Card className="w-50" style={{ backgroundImage: `url(${background})` }}>
           <CardHeader className="text-center py-3"><h3 style={{ color: '#ffffff', textShadow: '0px 0px 12px black' }}>ToDo List App</h3></CardHeader>
           <CardBody className="py-0 px-3">
+          <Alert className="mb-2" open={visible} theme="info">
+                <i className="material-icons mr-2">info</i>{message}
+            </Alert>
             <div className="p-2" style={{ boxShadow: '0px 0px 5px 0px black', background: 'rgba(255, 255, 255, 0.3)' }}>
               <Collapse open={collapse}>
-                <TodosList editItem={this.editItem.bind(this)} />
+                <TodosList editItem={this.editItem.bind(this)} showAlert={this.showAlert.bind(this)}  />
               </Collapse>
               <Collapse open={!collapse}>
                 <TodoDetail selectedTodoItem={selectedTodoItem} setValue={this.setValue.bind(this)} />
